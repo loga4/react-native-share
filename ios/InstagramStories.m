@@ -186,7 +186,7 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
             if (URL == nil) {
                 RCTLogError(@"key 'backgroundVideo' missing in options");
             } else {
-                NSData *video = [NSData dataWithContentsOfURL:URL];
+                NSData *video = [[NSFileManager defaultManager] contentsAtPath: URL];
                 [self backgroundVideo:video
                     attributionURL:attrURL
                     failureCallback:failureCallback
@@ -198,7 +198,7 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
     }
 }
 
-- (void)fallbackInstagram {
+- (void)fallbackInstagram:(RCTResponseErrorBlock)failureCallback {
     // Cannot open instagram
     NSString *stringURL = @"http://itunes.apple.com/app/instagram/id389801252";
     NSURL *url = [NSURL URLWithString:stringURL];
@@ -209,6 +209,7 @@ backgroundBottomColor:(NSString *)backgroundBottomColor
     NSError *error = [NSError errorWithDomain:@"com.rnshare" code:1 userInfo:userInfo];
 
     NSLog(errorMessage);
+    failureCallback(error);
 }
 @end
 
